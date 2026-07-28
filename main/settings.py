@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env file
+load_dotenv(BASE_DIR / ".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uuh!ac_iq@zh&3v2y&-7)_vt%^n=#x6deg2lzqk_9392*eqp@('
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local Apps
+    'tickets',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -73,10 +86,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
 }
 
 
@@ -98,6 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Cloudinary link
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
