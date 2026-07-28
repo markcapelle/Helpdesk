@@ -15,6 +15,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = []
 
@@ -110,6 +111,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Cloudinary link
 CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+
+
+# Superuser creation gate
+ALLOW_SUPERUSER_CREATION = os.getenv("ALLOW_SUPERUSER_CREATION", "false").lower()
+
+if ALLOW_SUPERUSER_CREATION != "true" and "createsuperuser" in sys.argv:
+    raise SystemExit("Superuser creation is disabled in this environment.")
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
