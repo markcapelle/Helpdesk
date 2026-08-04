@@ -11,13 +11,13 @@
 
     <br>
 
-    <form action="/login" method="GET">
+    <form action="{% url 'login' %}" method="GET">
         <button type="submit">Login</button>
     </form>
 
     <br>
 
-    <form action="/register" method="GET">
+    <form action="{% url 'register' %}" method="GET">
         <button type="submit">Register</button>
     </form>
 </body>
