@@ -1,14 +1,9 @@
 from django.urls import path
-from django.shortcuts import render
-
-# Temporary simple render views until you build full logic
-def login_page(request):
-    return render(request, "login.html")
-
-def register_page(request):
-    return render(request, "register.html")
+from .views import login_page, register_page, dashboard, logout_page
 
 urlpatterns = [
     path("login/", login_page, name="login"),
     path("register/", register_page, name="register"),
+    path("dashboard/", dashboard, name="dashboard"),
+    path("logout/", logout_page, name="logout"),
 ]

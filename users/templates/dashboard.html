@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    {% include "partials/app-nav.html" %}
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+    <h1>Welcome, {{ request.user.username }}</h1>
+    <p>This is your dashboard.</p>
+
+{% endblock %}
