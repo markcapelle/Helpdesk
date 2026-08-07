@@ -22,10 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load .env file
 load_dotenv(BASE_DIR / ".env")
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -51,6 +47,11 @@ INSTALLED_APPS = [
     # Local Apps
     'tickets',
     'users',
+]
+
+INSTALLED_APPS += [
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
+
+# Cloudinary storage config
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Database

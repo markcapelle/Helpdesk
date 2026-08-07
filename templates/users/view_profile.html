@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block navigation %}
     {% include "partials/app-nav.html" %}
@@ -13,15 +14,16 @@
 
     <!-- Avatar -->
     <div class="text-center mb-4">
-        {% if profile.avatar %}
-            <img src="{{ profile.avatar }}" 
+        {% if profile.avatar.url %}
+            <img src="{{ profile.avatar.url }}"
                  alt="Avatar"
                  class="rounded-circle border"
                  style="width: 150px; height: 150px; object-fit: cover;">
         {% else %}
-            <div class="rounded-circle bg-secondary d-inline-block"
-                 style="width: 150px; height: 150px;">
-            </div>
+            <img src="{% static 'img/default-avatar.jpg' %}"
+                 alt="Avatar"
+                 class="rounded-circle border"
+                 style="width: 150px; height: 150px; object-fit: cover;">
         {% endif %}
     </div>
 

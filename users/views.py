@@ -65,7 +65,8 @@ def edit_user(request):
 
     if request.method == "POST":
         user_form = UserSelfServiceForm(request.POST, instance=user)
-        profile_form = UserProfileForm(request.POST, instance=user.profile)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user.profile)
+
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
