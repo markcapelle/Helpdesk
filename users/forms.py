@@ -26,6 +26,7 @@ class UserRegistrationForm(forms.ModelForm):
 
         return cleaned
 
+
 class UserProfileForm(forms.ModelForm):
     COUNTRY_CODES = [
         ("+353", "Ireland (+353)"),
@@ -60,29 +61,13 @@ class UserProfileForm(forms.ModelForm):
         fields = ["country_code", "phone", "avatar"]
 
     def clean_phone(self):
-        number = self.cleaned_data["phone"].strip()
-
-        # Remove spaces
-        number = number.replace(" ", "")
-
-        # If number starts with 0 → replace with (0)
-        if number.startswith("0"):
-            number = "(0)" + number[1:]
-        else:
-            # If number does NOT start with 0 → add (0)
-            number = "(0)" + number
-
-        return number
+        return self.cleaned_data["phone"].strip()
 
     def clean(self):
-        cleaned = super().clean()
-        cc = cleaned.get("country_code")
-        num = cleaned.get("phone")
+        return super().clean()
 
-        if cc and num:
-            cleaned["phone"] = f"{cc} {num}"
 
-        return cleaned
+
 
 
 
@@ -149,25 +134,11 @@ class AdminProfileForm(forms.ModelForm):
         fields = ["country_code", "phone", "avatar", "role"]
 
     def clean_phone(self):
-        number = self.cleaned_data["phone"].strip()
-        number = number.replace(" ", "")
-
-        if number.startswith("0"):
-            number = "(0)" + number[1:]
-        else:
-            number = "(0)" + number
-
-        return number
+        return self.cleaned_data["phone"].strip()
 
     def clean(self):
-        cleaned = super().clean()
-        cc = cleaned.get("country_code")
-        num = cleaned.get("phone")
+        return super().clean()
 
-        if cc and num:
-            cleaned["phone"] = f"{cc} {num}"
-
-        return cleaned
 
 
 class AdminUserEditForm(forms.ModelForm):

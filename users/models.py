@@ -9,7 +9,9 @@ class UserProfile(models.Model):
     )
 
     avatar = models.TextField(blank=True, null=True)
-    phone = models.TextField(blank=True, null=True)
+    country_code = models.CharField(max_length=10, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+
 
     # Role_id > auth_group.id
     role = models.ForeignKey(
@@ -20,5 +22,20 @@ class UserProfile(models.Model):
         related_name="profiles"
     )
 
+    def formatted_phone(self):
+        if not self.phone:
+            return ""
+
+        raw = self.phone.replace(" ", "")
+
+        # Optional: add (0) formatting only for display
+        if raw.startswith("0"):
+            raw = f"(0){raw[1:]}"
+        else:
+            raw = f"(0){raw}"
+
+        return f"{self.country_code} {raw}"
+
     def __str__(self):
         return f"{self.user.username} Profile"
+

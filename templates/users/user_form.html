@@ -7,40 +7,48 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 class="mb-4">{{ title }}</h1>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
     {% csrf_token %}
-    {{ user_form.as_p }}
-    {% if profile_form %}
 
-    <div class="mb-3">
-        <label class="form-label">Phone Number</label>
-        <div class="row g-2">
-            <div class="col-md-3">
-                {{ profile_form.country_code }}
-            </div>
-            <div class="col-md-9">
-                {{ profile_form.phone }}
+    <!-- User fields -->
+    <h4 class="mb-3">Your Account Details</h4>
+    {{ user_form.as_p }}
+
+    <!-- Profile fields -->
+    {% if profile_form %}
+        <hr class="my-4">
+
+        <h4 class="mb-3">Your Profile Details</h4>
+
+        <!-- Country Code + Phone -->
+        <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <div class="row g-2">
+                <div class="col-md-3">
+                    {{ profile_form.country_code }}
+                </div>
+                <div class="col-md-9">
+                    {{ profile_form.phone }}
+                </div>
             </div>
         </div>
-    </div>
 
-<div class="mb-3">
-    {{ profile_form.avatar.label_tag }}
-    {{ profile_form.avatar }}
-</div>
-
+        <!-- Avatar -->
+        <div class="mb-3">
+            {{ profile_form.avatar.label_tag }}
+            {{ profile_form.avatar }}
+        </div>
     {% endif %}
+
     <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
 </form>
 
-<br>
-
-<a href="{% url 'user_reset_password' %}" 
-   class="btn btn-sm btn-warning mb-3">
-    Reset Your Password
-</a>
-
+<div class="mt-4">
+    <a href="{% url 'user_reset_password' %}" class="btn btn-warning me-2">
+        Reset Your Password
+    </a>
+</div>
 
 {% endblock %}
