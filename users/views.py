@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+
+from .forms import UserRegistrationForm, UserProfileForm, UserSelfServiceForm
+
 
 # Login request
 def login_page(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -20,14 +21,69 @@ def login_page(request):
 
     return render(request, "login.html")
 
+
 # Register page
 def register_page(request):
-    return render(request, "register.html")
+    if request.method == "POST":
+        user_form = UserRegistrationForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data["password1"])
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            messages.success(request, "Account created successfully.")
+            return redirect("login")
+
+    else:
+        user_form = UserRegistrationForm()
+        profile_form = UserProfileForm()
+
+    return render(request, "users/user_form.html", {
+        "title": "Register New User",
+        "submit_label": "Register",
+        "user_form": user_form,
+        "profile_form": profile_form,
+    })
+
 
 # Login required to view dashboard
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
+
+
+# Edit user profile
+@login_required
+def edit_user(request):
+    user = request.user
+
+    if request.method == "POST":
+        user_form = UserSelfServiceForm(request.POST, instance=user)
+        profile_form = UserProfileForm(request.POST, instance=user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile updated.")
+            return redirect("dashboard")
+    else:
+        user_form = UserSelfServiceForm(instance=user)
+        profile_form = UserProfileForm(instance=user.profile)
+
+    return render(request, "users/user_form.html", {
+        "title": "Edit Your Profile",
+        "submit_label": "Save Changes",
+        "user_form": user_form,
+        "profile_form": profile_form,
+    })
+
+
 
 # Logout view
 def logout_page(request):

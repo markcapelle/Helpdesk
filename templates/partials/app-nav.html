@@ -1,17 +1,31 @@
 {% if request.user.is_authenticated %}
 <nav class="navbar navbar-dark bg-dark">
     <div class="container">
+
         <ul class="navbar-nav flex-row">
+
             <li class="nav-item me-3">
-                <a class="nav-link text-white" href="#">Dashboard</a>
+                <a class="nav-link text-white" href="{% url 'dashboard' %}">Dashboard</a>
             </li>
+
             <li class="nav-item me-3">
                 <a class="nav-link text-white" href="#">Tickets</a>
             </li>
+
+            {% if request.user.is_superuser %}
+            <li class="nav-item me-3">
+                <a class="nav-link text-warning" href="{% url 'admin_user_list' %}">
+                    Manage Users
+                </a>
+            </li>
+            {% endif %}
+
             <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
             </li>
+
         </ul>
+
     </div>
 </nav>
 {% endif %}
