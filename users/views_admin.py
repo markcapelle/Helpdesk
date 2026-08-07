@@ -14,15 +14,18 @@ def admin_user_list(request):
 def admin_create_user(request):
     if request.method == "POST":
         user_form = AdminUserCreateForm(request.POST)
-        profile_form = AdminProfileForm(request.POST)
+        profile_form = AdminProfileForm(request.POST, request.FILES)
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
 
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            profile = user.profile
+            profile.country_code = profile_form.cleaned_data["country_code"]
+            profile.phone = profile_form.cleaned_data["phone"]
+            profile.avatar = profile_form.cleaned_data["avatar"]
+            profile.role = profile_form.cleaned_data["role"]
             profile.save()
 
             messages.success(request, "User created successfully.")

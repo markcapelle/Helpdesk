@@ -116,6 +116,56 @@ class AdminUserCreateForm(forms.ModelForm):
         return cleaned
 
 class AdminProfileForm(forms.ModelForm):
+    COUNTRY_CODES = [
+        ("+353", "Ireland (+353)"),
+        ("+44", "UK (+44)"),
+        ("+1", "USA (+1)"),
+        ("+49", "Germany (+49)"),
+        ("+33", "France (+33)"),
+    ]
+
+    country_code = forms.ChoiceField(
+        label="Country Code",
+        choices=COUNTRY_CODES,
+        widget=forms.Select(attrs={"class": "form-select"})
+    )
+
+    phone = forms.CharField(
+        label="Phone Number",
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "85 123 4567"
+        })
+    )
+
+    avatar = forms.FileField(
+        label="Avatar",
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "form-control"})
+    )
+
     class Meta:
         model = UserProfile
-        fields = ["phone", "avatar", "role"]
+        fields = ["country_code", "phone", "avatar", "role"]
+
+    def clean_phone(self):
+        number = self.cleaned_data["phone"].strip()
+        number = number.replace(" ", "")
+
+        if number.startswith("0"):
+            number = "(0)" + number[1:]
+        else:
+            number = "(0)" + number
+
+        return number
+
+    def clean(self):
+        cleaned = super().clean()
+        cc = cleaned.get("country_code")
+        num = cleaned.get("phone")
+
+        if cc and num:
+            cleaned["phone"] = f"{cc} {num}"
+
+        return cleaned
+

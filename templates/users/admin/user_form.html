@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    {% include "partials/app-nav.html" %}
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- User fields (username, email, first name, last name) -->
+    {{ user_form.as_p }}
+
+    <!-- Profile fields (country code, phone, avatar, role) -->
+    {% if profile_form %}
+
+    <!-- Phone Number -->
+    <div class="mb-3">
+        <label class="form-label">Phone Number</label>
+        <div class="row g-2">
+            <div class="col-md-3">
+                {{ profile_form.country_code }}
+            </div>
+            <div class="col-md-9">
+                {{ profile_form.phone }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Avatar Upload -->
+    <div class="mb-3">
+        {{ profile_form.avatar.label_tag }}
+        {{ profile_form.avatar }}
+    </div>
+
+    <!-- Role Selection -->
+    <div class="mb-3">
+        {{ profile_form.role.label_tag }}
+        {{ profile_form.role }}
+    </div>
+
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+</form>
+
+<br>
+
+<a href="{% url 'admin_user_list' %}" class="btn btn-secondary">Cancel</a>
+
+{% endblock %}
