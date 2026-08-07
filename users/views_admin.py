@@ -30,16 +30,19 @@ def admin_create_user(request):
 
             messages.success(request, "User created successfully.")
             return redirect("admin_user_list")
+
     else:
-        user_form = AdminUserEditForm(instance=user)
+        user_form = AdminUserCreateForm()
         profile_form = AdminProfileForm()
 
-    return render(request, "users/admin/user_form.html", {
+    return render(request, "users/admin/new_user.html", {
         "title": "Create User",
         "submit_label": "Create",
         "user_form": user_form,
         "profile_form": profile_form,
     })
+
+
 
 
 @admin_required
