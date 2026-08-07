@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    {% include "partials/app-nav.html" %}
+{% endblock %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Your Profile</h1>
+
+<div class="card shadow-sm p-4" style="max-width: 600px; margin: auto;">
+
+    <!-- Avatar -->
+    <div class="text-center mb-4">
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar }}" 
+                 alt="Avatar"
+                 class="rounded-circle border"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+            <div class="rounded-circle bg-secondary d-inline-block"
+                 style="width: 150px; height: 150px;">
+            </div>
+        {% endif %}
+    </div>
+
+    <h3 class="text-center">{{ user.first_name }} {{ user.last_name }}</h3>
+    <p class="text-center text-muted">@{{ user.username }}</p>
+
+    <hr>
+
+    <div class="mb-3">
+        <strong>Email:</strong><br>
+        {{ user.email }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Phone:</strong><br>
+        {% if profile.phone %}
+            {{ profile.formatted_phone }}
+        {% else %}
+            —
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <strong>Role:</strong><br>
+        {% if profile.role %}
+            {{ profile.role.name }}
+        {% else %}
+            —
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <div class="text-center">
+        <a href="{% url 'edit_user' %}" class="btn btn-primary me-2">Edit Profile</a>
+        <a href="{% url 'user_reset_password' %}" class="btn btn-warning">Reset Password</a>
+    </div>
+
+</div>
+{% endblock %}

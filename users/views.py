@@ -105,6 +105,15 @@ def user_reset_password(request):
     return render(request, "users/reset_password.html")
 
 
+@login_required
+def view_profile(request):
+    user = request.user
+    profile = user.profile
+    return render(request, "users/view_profile.html", {
+        "user": user,
+        "profile": profile,
+    })
+
 
 # Logout view
 def logout_page(request):
