@@ -84,6 +84,27 @@ def edit_user(request):
     })
 
 
+@login_required
+def user_reset_password(request):
+    user = request.user
+
+    if request.method == "POST":
+        new_password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect("user_reset_password")
+
+        user.set_password(new_password)
+        user.save()
+
+        messages.success(request, "Password reset successfully. Please log in again.")
+        return redirect("login")
+
+    return render(request, "users/reset_password.html")
+
+
 
 # Logout view
 def logout_page(request):
