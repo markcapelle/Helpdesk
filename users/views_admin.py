@@ -111,3 +111,14 @@ def admin_delete_user(request, user_id):
         return redirect("admin_user_list")
 
     return redirect("admin_user_list")
+
+
+@admin_required
+def admin_view_profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    profile = user.profile
+    return render(request, "users/view_profile.html", {
+        "user": user,
+        "profile": profile,
+        "admin_view": True,   # flag so template knows this is admin mode
+    })

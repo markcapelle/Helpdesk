@@ -45,6 +45,10 @@
             </td>
 
             <td class="text-end">
+                <a href="{% url 'admin_view_profile' user.id %}" class="btn btn-sm btn-info me-2">
+                    View
+                </a>
+                
                 <a href="{% url 'admin_edit_user' user.id %}" class="btn btn-sm btn-warning me-2">
                     Edit
                 </a>

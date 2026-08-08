@@ -8,7 +8,6 @@
 {% block title %}Your Profile{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Your Profile</h1>
 
 <div class="card shadow-sm p-4" style="max-width: 600px; margin: auto;">
 
@@ -58,9 +57,21 @@
     <hr>
 
     <div class="text-center">
-        <a href="{% url 'edit_user' %}" class="btn btn-primary me-2">Edit Profile</a>
-        <a href="{% url 'user_reset_password' %}" class="btn btn-warning">Reset Password</a>
+
+        {% if admin_view %}
+            <!-- Admin viewing someone else's profile -->
+            <a href="{% url 'admin_edit_user' user.id %}" class="btn btn-primary me-2">Edit User</a>
+            <a href="{% url 'admin_reset_password' user.id %}" class="btn btn-warning me-2">Reset Password</a>
+            <a href="{% url 'admin_user_list' %}" class="btn btn-secondary">Back</a>
+
+        {% else %}
+            <!-- Normal user viewing their own profile -->
+            <a href="{% url 'edit_user' %}" class="btn btn-primary me-2">Edit Profile</a>
+            <a href="{% url 'user_reset_password' %}" class="btn btn-warning">Reset Password</a>
+        {% endif %}
+
     </div>
+
 
 </div>
 {% endblock %}
