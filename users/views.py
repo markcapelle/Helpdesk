@@ -5,7 +5,26 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm, UserSelfServiceForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from threading import Thread
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.views import PasswordResetView
 
+def async_send_mail(subject, body, from_email, to_email):
+    def _send():
+        email = EmailMultiAlternatives(subject, body, from_email, [to_email])
+        email.send()
+    Thread(target=_send).start()
+
+class ThreadedPasswordResetView(PasswordResetView):
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+
+        subject = self.render_to_string(subject_template_name, context).strip()
+        body = self.render_to_string(email_template_name, context)
+
+        async_send_mail(subject, body, from_email, to_email)
+
+        
 # Login request
 def login_page(request):
     if request.method == "POST":
