@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from threading import Thread
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.views import PasswordResetView
+from django.db import connection
 
 def async_send_mail(subject, body, from_email, to_email):
     def _send():
@@ -16,15 +17,20 @@ def async_send_mail(subject, body, from_email, to_email):
     Thread(target=_send).start()
 
 class ThreadedPasswordResetView(PasswordResetView):
-    def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name=None):
+    def dispatch(self, request, *args, **kwargs):
+        # Warm DB before form rendering
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1;")
+        return super().dispatch(request, *args, **kwargs)
 
-        subject = self.render_to_string(subject_template_name, context).strip()
-        body = self.render_to_string(email_template_name, context)
+    def form_valid(self, form):
+        # Warm DB again before user lookup
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1;")
+        return super().form_valid(form)
 
-        async_send_mail(subject, body, from_email, to_email)
 
-        
+
 # Login request
 def login_page(request):
     if request.method == "POST":
