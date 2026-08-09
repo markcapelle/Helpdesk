@@ -150,3 +150,18 @@ STATICFILES_DIRS = [
 
 # WhiteNoise static file compression + manifest support
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# Email system
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv("EMAIL_USER")      # Email address in .env
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS")  # Gmail App Password in .env
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Password Reset Link expiry (1hr)
+PASSWORD_RESET_TIMEOUT = 3600
