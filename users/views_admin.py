@@ -24,6 +24,10 @@ def admin_create_user(request):
             user.set_password(user_form.cleaned_data["password1"])
             user.save()
 
+            group = profile_form.cleaned_data["role"]
+            if group:
+                user.groups.add(group)
+
             profile = user.profile
             profile.country_code = profile_form.cleaned_data["country_code"]
             profile.phone = profile_form.cleaned_data["phone"]
@@ -96,8 +100,18 @@ def admin_edit_user(request, user_id):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            group = profile_form.cleaned_data["role"]
+            user.groups.clear()
+            if group:
+                user.groups.add(group)
             messages.success(request, "User updated successfully.")
-            return redirect("admin_user_list")
+            return render(request, "users/admin/user_form.html", {
+                "title": f"Edit User: {user.username}",
+                "submit_label": "Save Changes",
+                "user_form": user_form,
+                "profile_form": profile_form,
+            })
+
 
     else:
         user_form = AdminUserEditForm(instance=user)

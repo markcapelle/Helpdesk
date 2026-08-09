@@ -42,7 +42,12 @@ def edit_user(request):
             user_form.save()
             profile_form.save()
             messages.success(request, "Profile updated.")
-            return redirect("dashboard")
+            return render(request, "users/user_form.html", {
+                "title": "Edit Your Profile",
+                "submit_label": "Save Changes",
+                "user_form": user_form,
+                "profile_form": profile_form,
+            })
     else:
         user_form = UserSelfServiceForm(instance=user)
         profile_form = UserProfileForm(instance=user.profile)

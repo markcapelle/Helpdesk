@@ -165,3 +165,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Password Reset Link expiry (1hr)
 PASSWORD_RESET_TIMEOUT = 3600
+
+# Login
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"

@@ -37,6 +37,12 @@ class UserProfile(models.Model):
 
         return f"{self.country_code} {raw}"
 
+    def is_admin(self):
+        return self.user.groups.filter(name__iexact="administrator").exists()
+
+
+
+
     def __str__(self):
         return f"{self.user.username} Profile"
 

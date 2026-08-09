@@ -24,12 +24,12 @@
                 </a>
             </li>
 
-            {% if request.user.is_superuser %}
-            <li class="nav-item me-3">
-                <a class="nav-link text-warning" href="{% url 'admin_user_list' %}">
-                    Manage Users
-                </a>
-            </li>
+            {% if request.user.profile.is_admin %}
+                <li class="nav-item me-3">
+                    <a class="nav-link text-warning" href="{% url 'admin_user_list' %}">
+                        Manage Users
+                    </a>
+                </li>
             {% endif %}
 
             <li class="nav-item">
