@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
 from django.contrib.auth import views as auth_views
-from users.views import ThreadedPasswordResetView
 
 def homepage(request):
     return render(request, "homepage.html")
@@ -31,7 +30,7 @@ urlpatterns = [
     
     # Password Reset URLs
     path("password-reset/",
-        ThreadedPasswordResetView.as_view(
+        auth_views.PasswordResetView.as_view(
             template_name="users/password_reset.html"
         ),
         name="password_reset"),
@@ -54,5 +53,3 @@ urlpatterns = [
         ),
         name="password_reset_complete"),
 ]
-
-

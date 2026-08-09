@@ -5,31 +5,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm, UserSelfServiceForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from threading import Thread
-from django.core.mail import EmailMultiAlternatives
-from django.contrib.auth.views import PasswordResetView
-from django.db import connection
-
-def async_send_mail(subject, body, from_email, to_email):
-    def _send():
-        email = EmailMultiAlternatives(subject, body, from_email, [to_email])
-        email.send()
-    Thread(target=_send).start()
-
-class ThreadedPasswordResetView(PasswordResetView):
-    def dispatch(self, request, *args, **kwargs):
-        # Warm DB before form rendering
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1;")
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        # Warm DB again before user lookup
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1;")
-        return super().form_valid(form)
-
-
 
 # Login request
 def login_page(request):
@@ -46,12 +21,10 @@ def login_page(request):
 
     return render(request, "login.html")
 
-
 # Login required to view dashboard
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
-
 
 # Edit user profile
 @login_required
@@ -61,7 +34,6 @@ def edit_user(request):
     if request.method == "POST":
         user_form = UserSelfServiceForm(request.POST, instance=user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=user.profile)
-
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -83,7 +55,6 @@ def edit_user(request):
         "user_form": user_form,
         "profile_form": profile_form,
     })
-
 
 @login_required
 def user_reset_password(request):
@@ -112,7 +83,6 @@ def user_reset_password(request):
 
     return render(request, "users/reset_password.html")
 
-
 @login_required
 def view_profile(request):
     user = request.user
@@ -122,8 +92,8 @@ def view_profile(request):
         "profile": profile,
     })
 
-
 # Logout view
 def logout_page(request):
     logout(request)
     return redirect("homepage")
+
