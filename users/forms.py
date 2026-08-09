@@ -43,14 +43,11 @@ class UserProfileForm(forms.ModelForm):
         return super().clean()
 
 
-
-
-
-
 class UserSelfServiceForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["first_name", "last_name"]
+
 
 class AdminUserCreateForm(forms.ModelForm):
     password1 = forms.CharField(
@@ -66,6 +63,18 @@ class AdminUserCreateForm(forms.ModelForm):
         model = User
         fields = ["username", "email", "first_name", "last_name"]
 
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already in use.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
+
     def clean(self):
         cleaned = super().clean()
         p1 = cleaned.get("password1")
@@ -75,6 +84,7 @@ class AdminUserCreateForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match")
 
         return cleaned
+
 
 class AdminProfileForm(forms.ModelForm):
     COUNTRY_CODES = [
@@ -121,3 +131,15 @@ class AdminUserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["username", "email", "first_name", "last_name"]
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError("This username is already in use.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
