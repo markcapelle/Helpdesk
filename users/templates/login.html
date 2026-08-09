@@ -9,26 +9,31 @@
 {% block content %}
 <h1>Login</h1>
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-danger">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
 <form method="POST">
-    {% csrf_token %}
-    
-    <div class="mb-3">
-        <label class="form-label">Username</label>
-        <input type="text" name="username" class="form-control" required>
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">Username</label>
+    <input type="text" name="username" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    <input type="password" name="password" class="form-control" required>
+    <div class="mt-1">
+      <a href="{% url 'password_reset' %}" class="small text-muted">Forgot your password?</a>
     </div>
+  </div>
 
-    <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" required>
-
-        <div class="mt-1">
-            <a href="{% url 'password_reset' %}" class="small text-muted">Forgot your password?</a>
-        </div>
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Login</button>
-    <a href="{% url 'homepage' %}" class="btn btn-secondary ms-2">Cancel</a>
+  <button type="submit" class="btn btn-primary">Login</button>
+  <a href="{% url 'homepage' %}" class="btn btn-secondary ms-2">Cancel</a>
 </form>
 
 {% endblock %}

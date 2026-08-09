@@ -9,6 +9,12 @@
 {% block content %}
 <h1 class="mb-4">{{ title }}</h1>
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-danger">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
 <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
     {% csrf_token %}
 

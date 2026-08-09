@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User, Group
 from .models import UserProfile
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 class UserProfileForm(forms.ModelForm):
     COUNTRY_CODES = [
@@ -61,7 +62,7 @@ class AdminUserCreateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "first_name", "last_name"]
+        fields = ["username", "email", "first_name", "last_name", "password1", "password2"]
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
@@ -82,6 +83,12 @@ class AdminUserCreateForm(forms.ModelForm):
 
         if p1 != p2:
             raise forms.ValidationError("Passwords do not match")
+
+        # Run Django password validators
+        try:
+            validate_password(p1)
+        except ValidationError as e:
+            raise forms.ValidationError(e.messages)
 
         return cleaned
 

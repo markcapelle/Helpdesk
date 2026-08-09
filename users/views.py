@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
 from .forms import UserProfileForm, UserSelfServiceForm
-
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # Login request
 def login_page(request):
@@ -65,6 +65,13 @@ def user_reset_password(request):
 
         if new_password != confirm_password:
             messages.error(request, "Passwords do not match.")
+            return redirect("user_reset_password")
+
+        try:
+            validate_password(new_password, user=user)
+        except ValidationError as e:
+            for msg in e.messages:
+                messages.error(request, msg)
             return redirect("user_reset_password")
 
         user.set_password(new_password)

@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .forms import AdminUserCreateForm, AdminProfileForm, AdminUserEditForm
 from .utils import admin_required
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+
 
 @admin_required
 def admin_user_list(request):
@@ -31,6 +34,13 @@ def admin_create_user(request):
             messages.success(request, "User created successfully.")
             return redirect("admin_user_list")
 
+        return render(request, "users/admin/new_user.html", {
+            "title": "Create User",
+            "submit_label": "Create",
+            "user_form": user_form,
+            "profile_form": profile_form,
+        })
+
     else:
         user_form = AdminUserCreateForm()
         profile_form = AdminProfileForm()
@@ -55,6 +65,13 @@ def admin_reset_password(request, user_id):
 
         if new_password != confirm_password:
             messages.error(request, "Passwords do not match.")
+            return redirect("admin_reset_password", user_id=user_id)
+
+        try:
+            validate_password(new_password, user=user)
+        except ValidationError as e:
+            for msg in e.messages:
+                messages.error(request, msg)
             return redirect("admin_reset_password", user_id=user_id)
 
         user.set_password(new_password)
