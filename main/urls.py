@@ -55,3 +55,5 @@ urlpatterns = [
         ),
         name="password_reset_complete"),
 ]
+
+handler403 = "main.views.permission_denied"

@@ -1,0 +1,23 @@
+{% load static %}
+
+<nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-brand mb-0 h5 text-white">
+        Ticket #{{ ticket.id }} — {{ ticket.title }}
+    </span>
+
+    <div class="d-flex align-items-center">
+
+        <!-- Save & Close -->
+        <button class="btn btn-success me-2" id="saveCloseBtn">
+            Save & Close
+        </button>
+
+        <!-- Red X (hard close) -->
+        <button class="btn btn-danger" onclick="window.close();">
+            ✕
+        </button>
+    </div>
+</nav>
+
+<!-- Load ticket-specific JS -->
+<script src="{% static 'js/tickets.js' %}"></script>

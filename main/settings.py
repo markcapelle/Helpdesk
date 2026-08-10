@@ -169,3 +169,7 @@ PASSWORD_RESET_TIMEOUT = 3600
 # Login
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
+
+
+# 403 Error (no permissions)
+handler403 = "main.views.permission_denied"
