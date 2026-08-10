@@ -11,6 +11,7 @@ class Status(models.Model):
 
 class Ticket(models.Model):
     title = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
     status = models.ForeignKey(
         Status,

@@ -18,6 +18,12 @@
                value="{{ ticket.title }}" required>
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="4">{{ ticket.description }}</textarea>
+    </div>
+
+
     <!-- Created / Due / Status -->
     <div class="row mb-3">
         <div class="col-md-4">

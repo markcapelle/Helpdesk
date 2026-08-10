@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Ticket, Status
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 
 @permission_required('tickets.view_ticket', raise_exception=True)
@@ -42,6 +42,7 @@ def ticket_detail(request, ticket_id):
 
     if request.method == "POST":
         ticket.title = request.POST.get("title")
+        ticket.description = request.POST.get("description")
         ticket.outcome = request.POST.get("outcome")
 
         # Created date
@@ -90,11 +91,14 @@ def new_ticket(request):
 
     if request.method == "POST":
         title = request.POST.get("title")
+        description = request.POST.get("description")
 
         Ticket.objects.create(
             title=title,
+            description=description,
             status=default_status,
-            assigned_to=request.user
+            assigned_to=request.user,
+            due_date=date.today() + timedelta(days=7)
         )
 
         return redirect("ticket_list")
