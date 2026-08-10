@@ -3,6 +3,7 @@ from .models import Ticket, Status
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
+from django.http import JsonResponse
 
 
 @permission_required('tickets.view_ticket', raise_exception=True)
@@ -66,6 +67,10 @@ def ticket_detail(request, ticket_id):
         ticket.status = statuses.filter(id=status_id).first() if status_id else ticket.status
 
         ticket.save()
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            ticket.save()
+            return JsonResponse({"saved": True})
 
     return render(request, "tickets/ticket_detail.html", {
         "ticket": ticket,
