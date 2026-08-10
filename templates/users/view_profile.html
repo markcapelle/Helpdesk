@@ -54,6 +54,21 @@
         {% endif %}
     </div>
 
+    <div class="mb-3">
+        <strong>Account Created:</strong><br>
+        {{ user.date_joined|date:"Y-m-d H:i" }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Last Login:</strong><br>
+        {% if user.last_login %}
+            {{ user.last_login|date:"Y-m-d H:i" }}
+        {% else %}
+            Never logged in
+        {% endif %}
+    </div>
+
+
     <hr>
 
     <div class="text-center">
