@@ -4,25 +4,111 @@
     {% include "partials/ticket-nav.html" %}
 {% endblock %}
 
-
 {% block title %}Ticket #{{ ticket.id }}{% endblock %}
 
 {% block content %}
-<h1>{{ ticket.title }}</h1>
 
-<p><strong>Status:</strong> {{ ticket.status.name }}</p>
-<p><strong>Created:</strong> {{ ticket.created_at }}</p>
-<p><strong>Assigned To:</strong>
-    {% if ticket.assigned_to %}
-        {{ ticket.assigned_to.username }}
-    {% else %}
-        —
-    {% endif %}
-</p>
+<form method="POST" class="card p-4 shadow-sm">
+    {% csrf_token %}
 
-<hr>
+    <!-- Title -->
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control"
+               value="{{ ticket.title }}" required>
+    </div>
 
-<h3>Cases</h3>
-<p>Cases tab will go here.</p>
+    <!-- Created / Due / Status -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Created Date</label>
+            <input type="date" name="created_at" class="form-control"
+                   value="{{ ticket.created_at|date:'Y-m-d' }}">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Due Date</label>
+            <input type="date" name="due_date" class="form-control"
+                   value="{{ ticket.due_date|date:'Y-m-d' }}">
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                {% for s in statuses %}
+                    <option value="{{ s.id }}"
+                        {% if ticket.status.id == s.id %}selected{% endif %}
+                    >
+                        {{ s.name|title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Assigned To -->
+    <div class="mb-3">
+        <label class="form-label">Assigned To</label>
+        <select name="assigned_to" class="form-select">
+            <option value="">— Unassigned —</option>
+            {% for u in assignable_users %}
+                <option value="{{ u.id }}"
+                    {% if ticket.assigned_to and ticket.assigned_to.id == u.id %}
+                        selected
+                    {% endif %}
+                >
+                    {{ u.username }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="ticketTabs">
+        <li class="nav-item">
+            <button class="nav-link active" id="outcome-tab" data-bs-toggle="tab"
+                    data-bs-target="#outcome">Outcome</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="cases-tab" data-bs-toggle="tab"
+                    data-bs-target="#cases">Cases</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+
+        <!-- Outcome Tab -->
+        <div class="tab-pane fade show active" id="outcome">
+            <label class="form-label">Outcome</label>
+            <textarea name="outcome" class="form-control" rows="6">{{ ticket.outcome }}</textarea>
+        </div>
+
+        <!-- Cases Tab -->
+        <div class="tab-pane fade" id="cases">
+            {% if ticket.cases.all %}
+                <ul class="list-group">
+                    {% for case in ticket.cases.all %}
+                        <li class="list-group-item">
+                            <strong>Case #{{ case.id }}</strong><br>
+                            Logged: {{ case.created_at }}<br>
+                            By: {{ case.logged_by.username }}<br>
+                            Hours: {{ case.hours }}<br>
+                            <p class="mt-2">{{ case.body }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No cases logged yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <hr>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>
 
 {% endblock %}

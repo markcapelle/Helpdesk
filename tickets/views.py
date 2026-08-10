@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Ticket, Status
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
+from datetime import datetime
 
 
 @permission_required('tickets.view_ticket', raise_exception=True)
@@ -24,11 +25,58 @@ def ticket_list(request):
         "status_filter": status_filter,
     })
 
-@permission_required('tickets.view_ticket', raise_exception=True)
+
+
+@permission_required('tickets.change_ticket', raise_exception=True)
 @login_required
 def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    return render(request, "tickets/ticket_detail.html", {"ticket": ticket})
+
+    # Users in the "user" group
+    from django.contrib.auth.models import Group
+    user_group = Group.objects.get(name__iexact="user")
+    assignable_users = user_group.user_set.all()
+
+    # All statuses
+    statuses = Status.objects.all().order_by("name")
+
+    if request.method == "POST":
+        ticket.title = request.POST.get("title")
+        ticket.outcome = request.POST.get("outcome")
+
+        # Created date
+        created_raw = request.POST.get("created_at")
+        if created_raw:
+            ticket.created_at = datetime.strptime(created_raw, "%Y-%m-%d").date()
+
+        # Due date
+        due_raw = request.POST.get("due_date")
+        if due_raw:
+            ticket.due_date = datetime.strptime(due_raw, "%Y-%m-%d").date()
+        else:
+            ticket.due_date = None
+
+        # Assigned user
+        assigned_id = request.POST.get("assigned_to")
+        ticket.assigned_to = assignable_users.filter(id=assigned_id).first() if assigned_id else None
+
+        # Status
+        status_id = request.POST.get("status")
+        ticket.status = statuses.filter(id=status_id).first() if status_id else ticket.status
+
+        ticket.save()
+
+    return render(request, "tickets/ticket_detail.html", {
+        "ticket": ticket,
+        "assignable_users": assignable_users,
+        "statuses": statuses,
+    })
+
+
+
+
+
+
 
 @permission_required('tickets.add_ticket', raise_exception=True)
 @login_required

@@ -30,36 +30,49 @@
 
 <!-- Ticket Table -->
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Open</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Created</th>
-            <th>Assigned To</th>
-        </tr>
-    </thead>
+<thead>
+<tr>
+    <th>Open</th>
+    <th>Title</th>
+    <th>Status</th>
+    <th>Created</th>
+    <th>Due Date</th>
+    <th>Assigned To</th>
+</tr>
+</thead>
 
-    <tbody>
-        {% for ticket in tickets %}
-        <tr>
-            <td>
-                <a href="{% url 'ticket_detail' ticket.id %}" target="_blank"
-                   class="btn btn-primary btn-sm">Open</a>
-            </td>
-            <td>{{ ticket.title }}</td>
-            <td>{{ ticket.status.name }}</td>
-            <td>{{ ticket.created_at }}</td>
-            <td>
-                {% if ticket.assigned_to %}
-                    {{ ticket.assigned_to.username }}
-                {% else %}
-                    —
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<tbody>
+{% for ticket in tickets %}
+<tr>
+    <td>
+        <a href="{% url 'ticket_detail' ticket.id %}" target="_blank"
+           class="btn btn-primary btn-sm">Open</a>
+    </td>
+
+    <td>{{ ticket.title }}</td>
+    <td>{{ ticket.status.name }}</td>
+
+    <td>{{ ticket.created_at|date:"Y-m-d" }}</td>
+
+    <td>
+        {% if ticket.due_date %}
+            {{ ticket.due_date|date:"Y-m-d" }}
+        {% else %}
+            —
+        {% endif %}
+    </td>
+
+    <td>
+        {% if ticket.assigned_to %}
+            {{ ticket.assigned_to.username }}
+        {% else %}
+            —
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</tbody>
 </table>
+
 
 {% endblock %}
