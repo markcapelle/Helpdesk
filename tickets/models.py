@@ -55,7 +55,7 @@ class Case(models.Model):
 
     body = models.TextField()
 
-    hours = models.IntegerField(null=True, blank=True)
+    hours = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f"Case #{self.id} for Ticket #{self.ticket.id}"

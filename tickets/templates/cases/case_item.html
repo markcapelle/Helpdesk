@@ -24,7 +24,9 @@
                 type="number" 
                 class="form-control case-hours" 
                 name="case_hours_{{ case.id|default:'new' }}" 
-                value="{{ case.hours|default:'' }}">
+                value="{{ case.hours|default:'' }}"
+                step="0.25"
+                min="0">
         </div>
 
         <!-- Logged By -->
