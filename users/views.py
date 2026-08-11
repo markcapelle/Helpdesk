@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm, UserSelfServiceForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from tickets.models import Ticket
 
 # Login request
 def login_page(request):
@@ -24,7 +25,15 @@ def login_page(request):
 # Login required to view dashboard
 @login_required
 def dashboard(request):
-    return render(request, "dashboard.html")
+    tickets = Ticket.objects.filter(
+        assigned_to=request.user,
+        status__name__iexact="open"
+    ).order_by("created_at")
+
+    return render(request, "users/dashboard.html", {
+        "tickets": tickets
+    })
+
 
 # Edit user profile
 @login_required
