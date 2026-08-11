@@ -20,7 +20,7 @@ def ticket_list(request):
 
     statuses = Status.objects.all()
 
-    return render(request, "tickets/ticket_list.html", {
+    return render(request, "tickets/ticket_list_view.html", {
         "tickets": tickets,
         "statuses": statuses,
         "status_filter": status_filter,
