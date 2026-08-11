@@ -28,9 +28,12 @@ def ticket_list(request):
 
 
 
+
+
 @permission_required('tickets.change_ticket', raise_exception=True)
 @login_required
 def ticket_detail(request, ticket_id):
+
     ticket = get_object_or_404(Ticket, id=ticket_id)
 
     # Users in the "user" group
@@ -42,6 +45,9 @@ def ticket_detail(request, ticket_id):
     statuses = Status.objects.all().order_by("name")
 
     if request.method == "POST":
+
+
+        # Save ticket fields
         ticket.title = request.POST.get("title")
         ticket.description = request.POST.get("description")
         ticket.outcome = request.POST.get("outcome")
@@ -68,16 +74,61 @@ def ticket_detail(request, ticket_id):
 
         ticket.save()
 
+        # Save Cases (existing + new)
+        from .models import Case
+
+        for key, value in request.POST.items():
+
+            # Only process case bodies
+            if not key.startswith("case_body_"):
+                continue
+
+            case_id = key.replace("case_body_", "")
+            body = value.strip()
+            hours_raw = request.POST.get(f"case_hours_{case_id}", "").strip()
+
+            # Skip completely empty cases
+            if not body and not hours_raw:
+                continue
+
+            # Convert hours
+            hours = None
+            if hours_raw:
+                try:
+                    hours = float(hours_raw)
+                except ValueError:
+                    hours = None
+
+            # NEW CASE
+            if case_id.startswith("new"):
+                Case.objects.create(
+                    ticket=ticket,
+                    body=body,
+                    hours=hours,
+                    logged_by=request.user
+                )
+                continue
+
+            # EXISTING CASE
+            try:
+                case = Case.objects.get(id=case_id, ticket=ticket)
+            except Case.DoesNotExist:
+                continue
+
+            case.body = body
+            case.hours = hours
+            case.save()
+
+        # AJAX Save & Close
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            ticket.save()
             return JsonResponse({"saved": True})
 
     return render(request, "tickets/ticket_detail.html", {
         "ticket": ticket,
         "assignable_users": assignable_users,
         "statuses": statuses,
+        "current_username": request.user.username,
     })
-
 
 
 

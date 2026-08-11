@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block navigation %}
     {% include "partials/ticket-nav.html" %}
@@ -74,11 +75,11 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs" id="ticketTabs">
         <li class="nav-item">
-            <button class="nav-link active" id="outcome-tab" data-bs-toggle="tab"
+            <button type="button" class="nav-link active" id="outcome-tab" data-bs-toggle="tab"
                     data-bs-target="#outcome">Outcome</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link" id="cases-tab" data-bs-toggle="tab"
+            <button type="button" class="nav-link" id="cases-tab" data-bs-toggle="tab"
                     data-bs-target="#cases">Cases</button>
         </li>
     </ul>
@@ -93,21 +94,13 @@
 
         <!-- Cases Tab -->
         <div class="tab-pane fade" id="cases">
-            {% if ticket.cases.all %}
-                <ul class="list-group">
-                    {% for case in ticket.cases.all %}
-                        <li class="list-group-item">
-                            <strong>Case #{{ case.id }}</strong><br>
-                            Logged: {{ case.created_at }}<br>
-                            By: {{ case.logged_by.username }}<br>
-                            Hours: {{ case.hours }}<br>
-                            <p class="mt-2">{{ case.body }}</p>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-muted">No cases logged yet.</p>
-            {% endif %}
+            {% for case in ticket.cases.all %}
+                {% include "cases/case_item.html" with case=case %}
+            {% endfor %}
+
+            <!-- Empty auto-create case -->
+            {% include "cases/case_item.html" with case=None is_template=True %}
+
         </div>
 
     </div>
@@ -115,6 +108,11 @@
     <hr>
 
     <button type="submit" class="btn btn-success">Save Changes</button>
+
+    <script src="{% static 'js/cases.js' %}"></script>
+    <script>
+        window.CURRENT_USERNAME = "{{ request.user.username }}";
+    </script>
 </form>
 
 {% endblock %}

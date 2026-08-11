@@ -1,0 +1,80 @@
+<div class="case-item card mb-3 p-3 {% if is_template %}case-template{% endif %}"
+     data-case-id="{{ case.id|default:'new' }}">
+
+    {% if case %}
+        <div class="small text-muted mb-2">
+            Case #{{ case.id }} — Logged {{ case.created_at }} by {{ case.logged_by.username }}
+        </div>
+    {% endif %}
+
+    <div class="mb-3">
+        <label class="form-label">Case Notes</label>
+        <textarea 
+            class="form-control case-body" 
+            name="case_body_{{ case.id|default:'new' }}" 
+            rows="4">{{ case.body|default:'' }}</textarea>
+    </div>
+
+    <div class="row">
+
+        <!-- Hours -->
+        <div class="col-md-4">
+            <label class="form-label">Hours</label>
+            <input 
+                type="number" 
+                class="form-control case-hours" 
+                name="case_hours_{{ case.id|default:'new' }}" 
+                value="{{ case.hours|default:'' }}">
+        </div>
+
+        <!-- Logged By -->
+        <div class="col-md-4">
+            <label class="form-label">Logged By</label>
+            {% if case %}
+                <input 
+                    type="text" 
+                    class="form-control"
+                    data-field="logged_by"
+                    value="{{ case.logged_by.username }}"
+                    disabled>
+            {% else %}
+                <input 
+                    type="text" 
+                    class="form-control"
+                    data-field="logged_by"
+                    value=""
+                    disabled>
+            {% endif %}
+        </div>
+
+        <!-- Created -->
+        <div class="col-md-4">
+            <label class="form-label">Created</label>
+            {% if case %}
+                <input 
+                    type="text" 
+                    class="form-control"
+                    data-field="created"
+                    value="{{ case.created_at }}"
+                    disabled>
+            {% else %}
+                <input 
+                    type="text" 
+                    class="form-control"
+                    data-field="created"
+                    value=""
+                    disabled>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- Timer -->
+    <div class="mt-3">
+        <button type="button" class="btn btn-outline-primary case-timer-btn">
+            ⏱ Start Timer
+        </button>
+        <span class="ms-2 case-timer-display">00:00:00</span>
+    </div>
+
+</div>
