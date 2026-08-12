@@ -1,8 +1,9 @@
 {% if request.user.is_authenticated %}
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark position-relative">
     <div class="container">
 
-        <ul class="navbar-nav flex-row">
+        <ul class="navbar-nav flex-row w-100">
+
 
             <li class="nav-item me-3">
                 <a class="nav-link text-white" href="{% url 'dashboard' %}">Dashboard</a>
@@ -10,18 +11,6 @@
 
             <li class="nav-item me-3">
                 <a class="nav-link text-white" href="{% url 'ticket_list' %}">Tickets</a>
-            </li>
-
-            <li class="nav-item me-3">
-                <a class="nav-link text-white" href="{% url 'view_profile' %}">
-                    View Profile
-                </a>
-            </li>
-
-            <li class="nav-item me-3">
-                <a class="nav-link text-white" href="{% url 'edit_user' %}">
-                    Edit Profile
-                </a>
             </li>
 
             {% if request.user.profile.is_admin %}
@@ -32,8 +21,40 @@
                 </li>
             {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+            <li class="nav-item dropdown ms-auto">
+                <a class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="userMenu"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+
+                    <!-- Avatar -->
+                    <img src="{{ request.user.profile.avatar.url|default:'/static/img/default-avatar.jpg' }}"
+                        alt="avatar"
+                        class="rounded-circle"
+                        style="width:32px; height:32px; object-fit:cover;">
+
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end position-absolute" aria-labelledby="userMenu">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'view_profile' %}">
+                            View Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'edit_user' %}">
+                            Edit Profile
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                            Logout
+                        </a>
+                    </li>
+                </ul>
             </li>
 
         </ul>
