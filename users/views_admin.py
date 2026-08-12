@@ -10,7 +10,13 @@ from django.core.exceptions import ValidationError
 @admin_required
 def admin_user_list(request):
     users = User.objects.all().order_by("username")
+
+    # Hide superusers unless the viewer is a superuser
+    if not request.user.is_superuser:
+        users = users.filter(is_superuser=False)
+
     return render(request, "users/admin/user_list.html", {"users": users})
+
 
 
 @admin_required
