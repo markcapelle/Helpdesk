@@ -17,18 +17,38 @@
 
 <!-- Filter Dropdown -->
 <form method="GET" class="mb-4">
+
+    <!-- Preserve sort -->
     <input type="hidden" name="sort" value="{{ sort }}">
-    
-    <label class="form-label">Filter by Status</label>
-    <select name="status" class="form-select" onchange="this.form.submit()">
-        <option value="all" {% if status_filter == "all" %}selected{% endif %}>All</option>
-        {% for s in statuses %}
-        <option value="{{ s.name }}" {% if status_filter == s.name %}selected{% endif %}>
-            {{ s.name|title }}
-        </option>
-        {% endfor %}
-    </select>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Filter by Status</label>
+            <select name="status" class="form-select" onchange="this.form.submit()">
+                <option value="all" {% if status_filter == "all" %}selected{% endif %}>All</option>
+                {% for s in statuses %}
+                <option value="{{ s.name }}" {% if status_filter == s.name %}selected{% endif %}>
+                    {{ s.name|title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Filter by Assigned To</label>
+            <select name="assigned" class="form-select" onchange="this.form.submit()">
+                <option value="all" {% if assigned_filter == "all" %}selected{% endif %}>All</option>
+                {% for u in users %}
+                <option value="{{ u.id }}" {% if assigned_filter|add:"" == u.id|stringformat:"s" %}selected{% endif %}>
+                    {{ u.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
 </form>
+
 
 <!-- Ticket Table -->
 {% include "tickets/ticket_list.html" with tickets=tickets %}

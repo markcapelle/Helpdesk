@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Ticket, Status, Case
+from .models import Ticket, Status, Case, User
 from django.contrib.auth.decorators import login_required, permission_required
 from datetime import datetime, date, timedelta
 from django.http import JsonResponse
@@ -10,7 +10,8 @@ from django.http import JsonResponse
 def ticket_list(request):
 
     status_filter = request.GET.get("status", "open")
-    sort = request.GET.get("sort", "")  # NEW
+    assigned_filter = request.GET.get("assigned", "all")
+    sort = request.GET.get("sort", "")
 
     # Base queryset
     if status_filter == "all":
@@ -19,6 +20,10 @@ def ticket_list(request):
         tickets = Ticket.objects.filter(
             status__name__iexact=status_filter
         )
+
+    # Assigned-to filter
+    if assigned_filter != "all":
+        tickets = tickets.filter(assigned_to__id=assigned_filter)
 
     # Sorting map
     sort_map = {
@@ -34,16 +39,20 @@ def ticket_list(request):
     if sort in sort_map:
         tickets = tickets.order_by(sort_map[sort])
     else:
-        tickets = tickets.order_by("created_at")  # default
+        tickets = tickets.order_by("created_at")
 
     statuses = Status.objects.all()
+    users = User.objects.all().order_by("username")
 
     return render(request, "tickets/ticket_list_view.html", {
         "tickets": tickets,
         "statuses": statuses,
+        "users": users,
         "status_filter": status_filter,
+        "assigned_filter": assigned_filter,
         "sort": sort,
     })
+
 
 
 
