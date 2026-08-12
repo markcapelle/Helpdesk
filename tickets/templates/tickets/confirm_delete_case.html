@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h3>Delete Case #{{ case.id }}?</h3>
+    <p>This action cannot be undone.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'ticket_detail' ticket_id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

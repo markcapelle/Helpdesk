@@ -1,7 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Ticket, Status
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Ticket, Status, Case
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
 from django.http import JsonResponse
 
@@ -160,3 +159,36 @@ def new_ticket(request):
         return redirect("ticket_list")
 
     return render(request, "tickets/new_ticket.html")
+
+
+
+@permission_required('tickets.delete_ticket', raise_exception=True)
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+
+    if request.method == "POST":
+        ticket.delete()
+        return redirect("ticket_list")
+
+    return render(request, "tickets/confirm_delete_ticket.html", {
+        "ticket": ticket
+    })
+
+
+
+
+@permission_required('tickets.delete_case', raise_exception=True)
+@login_required
+def delete_case(request, case_id):
+    case = get_object_or_404(Case, id=case_id)
+    ticket_id = case.ticket.id
+
+    if request.method == "POST":
+        case.delete()
+        return redirect("ticket_detail", ticket_id=ticket_id)
+
+    return render(request, "tickets/confirm_delete_case.html", {
+        "case": case,
+        "ticket_id": ticket_id
+    })
