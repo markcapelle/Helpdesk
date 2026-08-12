@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Ticket, Status, Case, User
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 from datetime import datetime, date, timedelta
 from django.http import JsonResponse
 
@@ -23,7 +24,11 @@ def ticket_list(request):
 
     # Assigned-to filter
     if assigned_filter != "all":
-        tickets = tickets.filter(assigned_to__id=assigned_filter)
+        if assigned_filter == "none":
+            tickets = tickets.filter(assigned_to__isnull=True)
+        else:
+            tickets = tickets.filter(assigned_to__id=assigned_filter)
+
 
     # Sorting map
     sort_map = {
@@ -42,7 +47,14 @@ def ticket_list(request):
         tickets = tickets.order_by("created_at")
 
     statuses = Status.objects.all()
-    users = User.objects.all().order_by("username")
+
+    try:
+        users_group = Group.objects.get(name__iexact="user")
+        users = users_group.user_set.all().order_by("username")
+    except Group.DoesNotExist:
+        users = User.objects.none()
+
+    UNASSIGNED_OPTION = {"id": "none", "username": "Unassigned"}
 
     return render(request, "tickets/ticket_list_view.html", {
         "tickets": tickets,
@@ -51,7 +63,9 @@ def ticket_list(request):
         "status_filter": status_filter,
         "assigned_filter": assigned_filter,
         "sort": sort,
+        "today": date.today(),   # <-- required
     })
+
 
 
 
@@ -178,11 +192,23 @@ def new_ticket(request):
         title = request.POST.get("title")
         description = request.POST.get("description")
 
+        # Determine assignment:
+        # Only assign automatically if the user is in the "user" group
+        from django.contrib.auth.models import Group
+
+        try:
+            user_group = Group.objects.get(name__iexact="user")
+            is_normal_user = user_group.user_set.filter(id=request.user.id).exists()
+        except Group.DoesNotExist:
+            is_normal_user = False
+
+        assigned_user = request.user if is_normal_user else None
+
         Ticket.objects.create(
             title=title,
             description=description,
             status=default_status,
-            assigned_to=request.user,
+            assigned_to=assigned_user,
             due_date=date.today() + timedelta(days=7)
         )
 

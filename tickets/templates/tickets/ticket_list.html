@@ -1,5 +1,6 @@
 <table class="table table-striped">
 <thead>
+
 <tr>
     <th>Open</th>
 
@@ -45,7 +46,16 @@
 
 <tbody>
 {% for ticket in tickets %}
-<tr>
+<tr
+    {% if ticket.due_date and ticket.status.name|lower != "closed" %}
+        {% if ticket.due_date <= today %}
+            class="table-danger"
+        {% endif %}
+    {% endif %}
+>
+
+
+
     <td>
         <a href="{% url 'ticket_detail' ticket.id %}" target="_blank"
            class="btn btn-primary btn-sm">Open</a>

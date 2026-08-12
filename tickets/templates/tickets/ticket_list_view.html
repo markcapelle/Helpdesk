@@ -38,11 +38,16 @@
             <label class="form-label">Filter by Assigned To</label>
             <select name="assigned" class="form-select" onchange="this.form.submit()">
                 <option value="all" {% if assigned_filter == "all" %}selected{% endif %}>All</option>
+                <option value="none" {% if assigned_filter == "none" %}selected{% endif %}>
+                    Unassigned
+                </option>
+
                 {% for u in users %}
                 <option value="{{ u.id }}" {% if assigned_filter|add:"" == u.id|stringformat:"s" %}selected{% endif %}>
                     {{ u.username }}
                 </option>
                 {% endfor %}
+
             </select>
         </div>
     </div>
