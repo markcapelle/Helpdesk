@@ -2,13 +2,46 @@
 <thead>
 <tr>
     <th>Open</th>
-    <th>Title</th>
+
+    <!-- Title -->
+    <th>
+        Title
+        <a href="?status={{ status_filter }}&sort=title_asc"
+        class="btn btn-sm btn-outline-secondary ms-2">A–Z</a>
+
+        <a href="?status={{ status_filter }}&sort=title_desc"
+        class="btn btn-sm btn-outline-secondary">Z–A</a>
+
+    </th>
+
     <th>Status</th>
-    <th>Created</th>
-    <th>Due Date</th>
+
+    <!-- Created -->
+    <th>
+        Created
+        <a href="?status={{ status_filter }}&sort=created_asc"
+        class="btn btn-sm btn-outline-secondary ms-2">↑</a>
+
+        <a href="?status={{ status_filter }}&sort=created_desc"
+        class="btn btn-sm btn-outline-secondary">↓</a>
+
+    </th>
+
+    <!-- Due Date -->
+    <th>
+        Due Date
+        <a href="?status={{ status_filter }}&sort=created_asc"
+        class="btn btn-sm btn-outline-secondary ms-2">↑</a>
+
+        <a href="?status={{ status_filter }}&sort=created_desc"
+        class="btn btn-sm btn-outline-secondary">↓</a>
+
+    </th>
+
     <th>Assigned To</th>
 </tr>
 </thead>
+
 
 <tbody>
 {% for ticket in tickets %}

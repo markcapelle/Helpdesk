@@ -25,14 +25,30 @@ def login_page(request):
 # Login required to view dashboard
 @login_required
 def dashboard(request):
-    tickets = Ticket.objects.filter(
-        assigned_to=request.user,
-        status__name__iexact="open"
-    ).order_by("created_at")
+
+    sort = request.GET.get("sort", "")
+
+    tickets = Ticket.objects.filter(assigned_to=request.user)
+
+    sort_map = {
+        "title_asc": "title",
+        "title_desc": "-title",
+        "created_asc": "created_at",
+        "created_desc": "-created_at",
+        "due_asc": "due_date",
+        "due_desc": "-due_date",
+    }
+
+    if sort in sort_map:
+        tickets = tickets.order_by(sort_map[sort])
+    else:
+        tickets = tickets.order_by("created_at")  # default
 
     return render(request, "users/dashboard.html", {
-        "tickets": tickets
+        "tickets": tickets,
+        "sort": sort,
     })
+
 
 
 # Edit user profile

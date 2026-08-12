@@ -8,14 +8,33 @@ from django.http import JsonResponse
 @permission_required('tickets.view_ticket', raise_exception=True)
 @login_required
 def ticket_list(request):
-    status_filter = request.GET.get("status", "open")
 
+    status_filter = request.GET.get("status", "open")
+    sort = request.GET.get("sort", "")  # NEW
+
+    # Base queryset
     if status_filter == "all":
-        tickets = Ticket.objects.all().order_by("created_at")
+        tickets = Ticket.objects.all()
     else:
         tickets = Ticket.objects.filter(
             status__name__iexact=status_filter
-        ).order_by("created_at")
+        )
+
+    # Sorting map
+    sort_map = {
+        "title_asc": "title",
+        "title_desc": "-title",
+        "created_asc": "created_at",
+        "created_desc": "-created_at",
+        "due_asc": "due_date",
+        "due_desc": "-due_date",
+    }
+
+    # Apply sorting
+    if sort in sort_map:
+        tickets = tickets.order_by(sort_map[sort])
+    else:
+        tickets = tickets.order_by("created_at")  # default
 
     statuses = Status.objects.all()
 
@@ -23,7 +42,9 @@ def ticket_list(request):
         "tickets": tickets,
         "statuses": statuses,
         "status_filter": status_filter,
+        "sort": sort,
     })
+
 
 
 
