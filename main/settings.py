@@ -89,6 +89,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
+CLOUDINARY_SECURE = True
 
 
 # Database

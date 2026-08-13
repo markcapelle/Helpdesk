@@ -1,0 +1,112 @@
+/* App-nav highlights */
+.app-nav-link {
+    position: relative;
+    transition: all 0.15s ease-in-out;
+}
+
+.app-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* subtle highlight on dark bg */
+    border-radius: 4px;
+}
+
+.app-nav-link:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #0d6efd; /* Bootstrap primary */
+    border-radius: 3px 3px 0 0;
+}
+
+
+/* app-nav responsive */
+@media (max-width: 700px) {
+    .navbar-nav.flex-row {
+        flex-direction: column !important;
+        align-items: flex-start;
+    }
+
+    .navbar-nav.flex-row .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .navbar-nav.flex-row .ms-auto {
+        margin-left: 0 !important;
+        margin-top: 1rem;
+    }
+}
+
+/* When app-nav collapses, force dropdown to open to the right */
+@media (max-width: 700px) {
+    .navbar-nav .dropdown-menu {
+        left: 100% !important;   /* push menu to the right of the avatar */
+        right: auto !important;  /* disable right alignment */
+        transform: translateX(0) !important;
+    }
+}
+
+
+
+
+
+
+/* ticket_list ticket table */
+.ticket-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 870px) {
+    .ticket-table-wrapper table {
+        min-width: 870px; /* prevents squashing */
+    }
+}
+
+
+
+
+
+
+/* ticket_list_view filters */
+@media (max-width: 800px) {
+    .ticket-filters .row > div {
+        margin-bottom: 1rem;
+    }
+}
+
+
+
+
+
+
+
+/* Messenger page layout */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px); /* subtract nav + header */
+}
+
+#chatWindow {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.contact-selected {
+    background-color: #d4edda !important;
+    border-left: 4px solid #28a745 !important;
+}
+
+
+
+
+/* Tickets autosave popup */
+#autosaveIndicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
