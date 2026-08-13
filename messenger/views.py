@@ -6,21 +6,40 @@ from .models import Conversation, Message, models
 
 
 
+
+def has_unread_messages(user, other):
+    conv = Conversation.objects.filter(
+        models.Q(user1=user, user2=other) |
+        models.Q(user1=other, user2=user)
+    ).first()
+
+    if not conv:
+        return False
+
+    return conv.messages.filter(sender=other).exclude(seen_by=user).exists()
+
+
+
+
+
+
+
 @permission_required('messenger.messenger_read', raise_exception=True)
 @login_required
 def messenger_home(request):
-    # All users except self
     contacts = User.objects.exclude(id=request.user.id).order_by("username")
 
-    # All conversations involving this user
-    conversations = Conversation.objects.filter(
-        models.Q(user1=request.user) | models.Q(user2=request.user)
-    )
+    enriched = []
+    for c in contacts:
+        enriched.append({
+            "user": c,
+            "has_unread": has_unread_messages(request.user, c)
+        })
 
     return render(request, "messenger/messenger.html", {
-        "contacts": contacts,
-        "conversations": conversations,
+        "contacts": enriched,
     })
+
 
 
 
@@ -75,7 +94,15 @@ def create_or_get(request, user_id):
     if not conv:
         conv = Conversation.objects.create(user1=request.user, user2=other)
 
+    # Mark all messages from OTHER as seen
+    conv.messages.filter(sender=other).exclude(seen_by=request.user).update()
+
+    for msg in conv.messages.filter(sender=other):
+        msg.seen_by.add(request.user)
+
     return JsonResponse({"conversation_id": conv.id})
+
+
 
 
 
@@ -86,6 +113,48 @@ def check_new(request, conv_id):
     last_id = int(request.GET.get("last_id", 0))
 
     newest = conv.messages.order_by("-id").first()
+
     if newest and newest.id > last_id:
+        # Mark all messages from OTHER as read
+        other_user = conv.user1 if conv.user2 == request.user else conv.user2
+
+        unread_msgs = conv.messages.filter(sender=other_user).exclude(seen_by=request.user)
+
+        for msg in unread_msgs:
+            msg.seen_by.add(request.user)
+
         return JsonResponse({"new": True})
+
     return JsonResponse({"new": False})
+
+
+
+
+
+
+
+
+@login_required
+def unread_status(request):
+    contacts = User.objects.exclude(id=request.user.id)
+    result = {}
+
+    for c in contacts:
+        conv = Conversation.objects.filter(
+            models.Q(user1=request.user, user2=c) |
+            models.Q(user1=c, user2=request.user)
+        ).first()
+
+        if not conv:
+            result[c.id] = False
+            continue
+
+        unread = conv.messages.filter(sender=c).exclude(seen_by=request.user).exists()
+
+        result[c.id] = {
+            "unread": unread,
+            "conversation_id": conv.id,
+            "other_user_id": c.id,
+        }
+
+    return JsonResponse(result)

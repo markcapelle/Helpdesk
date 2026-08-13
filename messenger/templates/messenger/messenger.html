@@ -20,11 +20,17 @@
         <h5 class="mt-2">Contacts</h5>
         <ul class="list-group">
             {% for c in contacts %}
-            <li class="list-group-item contact-item" data-user-id="{{ c.id }}">
-                <img src="{{ c.profile.avatar.url|default:'/static/img/default-avatar.jpg' }}"
-                     class="rounded-circle me-2"
-                     style="width:32px;height:32px;object-fit:cover;">
-                {{ c.username }}
+            <li class="list-group-item contact-item 
+                {% if c.has_unread %}list-group-item-warning{% endif %}"
+                data-user-id="{{ c.user.id }}">
+
+                <img src="{{ c.user.profile.avatar.url|default:'/static/img/default-avatar.jpg' }}"
+                    class="rounded-circle me-2"
+                    style="width:32px;height:32px;object-fit:cover;">
+
+                {{ c.user.username }}
+
+
             </li>
             {% endfor %}
         </ul>

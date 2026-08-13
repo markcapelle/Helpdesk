@@ -80,10 +80,10 @@ function getCSRFToken() {
 }
 
 // Polling helper
-async function checkForNew() {
-    if (!currentConversation) return;
+async function checkForNew(convId) {
+    if (!convId) return;
 
-    const response = await fetch(`/messenger/conversation/${currentConversation}/check/?last_id=${lastMessageId}`);
+    const response = await fetch(`/messenger/conversation/${convId}/check/?last_id=${lastMessageId}`);
     const data = await response.json();
 
     if (data.new) {
@@ -91,4 +91,47 @@ async function checkForNew() {
     }
 }
 
-setInterval(checkForNew, 2000);
+// Refresh contact highlights
+async function refreshContactHighlights(currentConv) {
+    const response = await fetch("/messenger/unread_status/");
+    const data = await response.json();
+
+    const otherUserId = currentConv ? getOtherUserIdForConversation(currentConv, data) : null;
+
+    document.querySelectorAll(".contact-item").forEach(item => {
+        const uid = item.dataset.userId;
+
+        // If this is the open conversation → never highlight
+        if (otherUserId && uid == otherUserId) {
+            item.classList.remove("list-group-item-warning");
+            return;
+        }
+
+        // Highlight only if unread is true
+        if (data[uid] && data[uid].unread) {
+            item.classList.add("list-group-item-warning");
+        } else {
+            item.classList.remove("list-group-item-warning");
+        }
+    });
+}
+
+
+
+function getOtherUserIdForConversation(convId, unreadData) {
+    for (const uid in unreadData) {
+        if (unreadData[uid].conversation_id == convId) {
+            return unreadData[uid].other_user_id;
+        }
+    }
+    return null;
+}
+
+
+
+setInterval(() => {
+    checkForNew(currentConversation);
+    refreshContactHighlights(currentConversation);
+}, 2000);
+
+

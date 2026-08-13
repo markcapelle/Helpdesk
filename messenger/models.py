@@ -17,6 +17,8 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    seen_by = models.ManyToManyField(User, related_name="seen_messages", blank=True)
+
 
     def __str__(self):
         return f"Msg {self.id} in Conv {self.conversation.id}"
