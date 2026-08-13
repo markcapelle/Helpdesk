@@ -1,0 +1,28 @@
+/* Messenger page layout */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px); /* subtract nav + header */
+}
+
+#chatWindow {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.contact-selected {
+    background-color: #d4edda !important;
+    border-left: 4px solid #28a745 !important;
+}
+
+
+
+
+/* Tickets autosave popup */
+#autosaveIndicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
