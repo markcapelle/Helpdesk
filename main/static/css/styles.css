@@ -38,6 +38,16 @@
     }
 }
 
+/* When app-nav collapses, force dropdown to open to the right */
+@media (max-width: 700px) {
+    .navbar-nav .dropdown-menu {
+        left: 100% !important;   /* push menu to the right of the avatar */
+        right: auto !important;  /* disable right alignment */
+        transform: translateX(0) !important;
+    }
+}
+
+
 
 
 
