@@ -3,30 +3,28 @@
     <div class="container">
 
         <ul class="navbar-nav flex-row w-100">
-
-
+            
             <li class="nav-item me-3">
-                <a class="nav-link text-white" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="nav-link text-white app-nav-link" href="{% url 'dashboard' %}">Dashboard</a>
             </li>
 
             <li class="nav-item me-3">
-                <a class="nav-link text-white" href="{% url 'ticket_list' %}">Tickets</a>
+                <a class="nav-link text-white app-nav-link" href="{% url 'ticket_list' %}">Tickets</a>
             </li>
 
             <li class="nav-item me-3">
-                <a class="nav-link text-white" href="{% url 'messenger_home' %}">
-                    </i> Messenger
+                <a class="nav-link text-white app-nav-link" href="{% url 'messenger_home' %}">
+                    Messenger
                 </a>
             </li>
 
-
             <!-- Manage users, if an admin -->
             {% if request.user.profile.is_admin %}
-                <li class="nav-item me-3">
-                    <a class="nav-link text-warning" href="{% url 'admin_user_list' %}">
-                        Manage Users
-                    </a>
-                </li>
+            <li class="nav-item me-3">
+                <a class="nav-link text-warning app-nav-link" href="{% url 'admin_user_list' %}">
+                    Manage Users
+                </a>
+            </li>
             {% endif %}
 
             <!-- User profile dropdown stuff -->
