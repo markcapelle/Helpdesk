@@ -41,7 +41,6 @@ def admin_create_user(request):
             profile.role = profile_form.cleaned_data["role"]
             profile.save()
 
-            messages.success(request, "User created successfully.")
             return redirect("admin_user_list")
 
         return render(request, "users/admin/new_user.html", {

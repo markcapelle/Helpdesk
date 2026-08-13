@@ -8,14 +8,25 @@ document.addEventListener("DOMContentLoaded", () => {
         item.addEventListener("click", async () => {
             const userId = item.dataset.userId;
 
+            // 🔹 Remove previous selection
+            document.querySelectorAll(".contact-item").forEach(i =>
+                i.classList.remove("contact-selected")
+            );
+
+            // 🔹 Highlight this contact
+            item.classList.add("contact-selected");
+
             // Create or fetch conversation
             const response = await fetch(`/messenger/create_or_get/${userId}/`);
             const data = await response.json();
 
             currentConversation = data.conversation_id;
+
             loadMessages();
         });
     });
+
+
 
     // Send message
     document.getElementById("sendBtn").addEventListener("click", async () => {
@@ -101,9 +112,14 @@ async function refreshContactHighlights(currentConv) {
     document.querySelectorAll(".contact-item").forEach(item => {
         const uid = item.dataset.userId;
 
-        // If this is the open conversation → never highlight
+        // If this is the open conversation → never highlight yellow
         if (otherUserId && uid == otherUserId) {
             item.classList.remove("list-group-item-warning");
+            return;
+        }
+
+        // If selected, do not touch its highlight
+        if (item.classList.contains("contact-selected")) {
             return;
         }
 
@@ -114,6 +130,7 @@ async function refreshContactHighlights(currentConv) {
             item.classList.remove("list-group-item-warning");
         }
     });
+
 }
 
 
