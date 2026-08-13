@@ -28,6 +28,8 @@ urlpatterns = [
     path("", include("users.urls")),
     path("admin-panel/", include("users.urls_admin")),
     path("tickets/", include("tickets.urls")),
+    path("messenger/", include("messenger.urls")),
+
 
     
     # Password Reset URLs

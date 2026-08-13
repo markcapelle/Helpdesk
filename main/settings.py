@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # Local Apps
     'tickets',
     'users',
+    'messenger',
 ]
 
 INSTALLED_APPS += [

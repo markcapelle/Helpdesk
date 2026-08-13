@@ -13,6 +13,14 @@
                 <a class="nav-link text-white" href="{% url 'ticket_list' %}">Tickets</a>
             </li>
 
+            <li class="nav-item me-3">
+                <a class="nav-link text-white" href="{% url 'messenger_home' %}">
+                    <i class="fa-solid fa-comments me-1"></i> Messenger
+                </a>
+            </li>
+
+
+            <!-- Manage users, if an admin -->
             {% if request.user.profile.is_admin %}
                 <li class="nav-item me-3">
                     <a class="nav-link text-warning" href="{% url 'admin_user_list' %}">
@@ -21,6 +29,7 @@
                 </li>
             {% endif %}
 
+            <!-- User profile dropdown stuff -->
             <li class="nav-item dropdown ms-auto">
                 <a class="nav-link dropdown-toggle d-flex align-items-center"
                 href="#"

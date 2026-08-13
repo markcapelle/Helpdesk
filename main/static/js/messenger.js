@@ -1,0 +1,94 @@
+let currentConversation = null;
+let lastMessageId = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Click contact → load/create conversation
+    document.querySelectorAll(".contact-item").forEach(item => {
+        item.addEventListener("click", async () => {
+            const userId = item.dataset.userId;
+
+            // Create or fetch conversation
+            const response = await fetch(`/messenger/create_or_get/${userId}/`);
+            const data = await response.json();
+
+            currentConversation = data.conversation_id;
+            loadMessages();
+        });
+    });
+
+    // Send message
+    document.getElementById("sendBtn").addEventListener("click", async () => {
+        if (!currentConversation) return;
+
+        const body = document.getElementById("chatInput").value.trim();
+        if (!body) return;
+
+        const formData = new FormData();
+        formData.append("conversation_id", currentConversation);
+        formData.append("body", body);
+
+        await fetch("/messenger/send/", {
+            method: "POST",
+            body: formData,
+            headers: { "X-CSRFToken": getCSRFToken() }
+        });
+
+        document.getElementById("chatInput").value = "";
+        loadMessages();
+    });
+    // Press Enter to send
+    document.getElementById("chatInput").addEventListener("keydown", async (e) => {
+        // Shift+Enter = new line
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // stop newline
+
+            document.getElementById("sendBtn").click(); // reuse existing logic
+        }
+    });
+
+});
+
+// Load messages
+async function loadMessages() {
+    const chat = document.getElementById("chatWindow");
+    const response = await fetch(`/messenger/conversation/${currentConversation}/messages/`);
+    const data = await response.json();
+
+    chat.innerHTML = "";
+
+    data.messages.forEach(m => {
+        lastMessageId = m.id;
+
+        const bubble = document.createElement("div");
+        bubble.className = m.sender === CURRENT_USERNAME ? "text-end mb-2" : "text-start mb-2";
+        bubble.innerHTML = `
+            <div class="p-2 rounded ${m.sender === CURRENT_USERNAME ? 'bg-primary text-white' : 'bg-white border'}">
+                <strong>${m.sender}</strong><br>
+                ${m.body}
+            </div>
+        `;
+        chat.appendChild(bubble);
+    });
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// CSRF helper
+function getCSRFToken() {
+    return document.getElementById("csrfToken").value;
+}
+
+// Polling helper
+async function checkForNew() {
+    if (!currentConversation) return;
+
+    const response = await fetch(`/messenger/conversation/${currentConversation}/check/?last_id=${lastMessageId}`);
+    const data = await response.json();
+
+    if (data.new) {
+        loadMessages();
+    }
+}
+
+setInterval(checkForNew, 2000);
