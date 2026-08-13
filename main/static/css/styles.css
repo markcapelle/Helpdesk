@@ -1,4 +1,4 @@
-/* App-nav */
+/* App-nav highlights */
 .app-nav-link {
     position: relative;
     transition: all 0.15s ease-in-out;
@@ -19,6 +19,55 @@
     background-color: #0d6efd; /* Bootstrap primary */
     border-radius: 3px 3px 0 0;
 }
+
+
+/* app-nav responsive */
+@media (max-width: 700px) {
+    .navbar-nav.flex-row {
+        flex-direction: column !important;
+        align-items: flex-start;
+    }
+
+    .navbar-nav.flex-row .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .navbar-nav.flex-row .ms-auto {
+        margin-left: 0 !important;
+        margin-top: 1rem;
+    }
+}
+
+
+
+
+
+/* ticket_list ticket table */
+.ticket-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 870px) {
+    .ticket-table-wrapper table {
+        min-width: 870px; /* prevents squashing */
+    }
+}
+
+
+
+
+
+
+/* ticket_list_view filters */
+@media (max-width: 800px) {
+    .ticket-filters .row > div {
+        margin-bottom: 1rem;
+    }
+}
+
+
+
 
 
 
