@@ -22,8 +22,17 @@ from django.contrib.auth import views as auth_views
 def homepage(request):
     return render(request, "homepage.html")
 
+def help_page(request):
+    return render(request, "help.html")
+
+def contact_page(request):
+    return render(request, "contact.html")
+
+
 urlpatterns = [
     path("", homepage, name="homepage"),
+      path("help/", help_page, name="help_page"),
+    path("contact/", contact_page, name="contact_page"),
     path("admin/", admin.site.urls),
     path("", include("users.urls")),
     path("admin-panel/", include("users.urls_admin")),

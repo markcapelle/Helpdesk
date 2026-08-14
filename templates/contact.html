@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block navigation %}
+    {% include "partials/web-nav.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- MAP SECTION -->
+    <div class="map-wrapper mb-4">
+        <div class="ratio ratio-16x9">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d415.37606728636223!2d-6.973094437820428!3d53.91891808486412!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4860aa8391a9d669%3A0x94bf601ae7bf1a85!2sDrumbannan%2C%20Co.%20Cavan%2C%20A82%20RF21!5e0!3m2!1sen!2sie!4v1786731423959!5m2!1sen!2sie"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+    </div>
+
+
+    <!-- TWO SIDE-BY-SIDE BOXES -->
+<div class="row">
+    <!-- Contact Info -->
+    <div class="col-md-6">
+        <div class="section-box equal-height">
+            <h3>Contact Information</h3>
+            <p><strong>Phone: </strong><a href="tel:+353429666930">+(353) (0)42 9666 930</a></p>
+            <p><strong>Email: </strong><a href="mailto:info@BK-Technology.com?subject=Helpdesk%20Support%20Request">
+                info@BK-Technology.com
+            </a></p>
+
+        </div>
+    </div>
+
+    <!-- Address -->
+    <div class="col-md-6">
+        <div class="section-box equal-height">
+            <h3>Address</h3>
+            <p>Bailieborough Business Centre</p>
+            <p>Unit 4</p>
+            <p>Shercock Road</p>
+            <p>Bailieborough</p>
+            <p>Co. Cavan</p>
+            <p><strong>Eircode:</strong> A82 RF21</p>
+        </div>
+    </div>
+</div>
+
+
+    <!-- OPENING HOURS (CENTERED) -->
+    <div class="row mt-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="section-box text-center">
+                <h3>Business Hours</h3>
+                <p><strong>Mon – Fri:</strong> 9:00am – 5:30pm</p>
+                <p><strong>Sat – Sun:</strong> Closed</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

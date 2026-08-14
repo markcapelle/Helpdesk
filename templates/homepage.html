@@ -8,17 +8,23 @@
 
 {% block content %}
 
+<section class="section-box">
     <h1>Helpdesk Home</h1>
     <p>Welcome to the Helpdesk application homepage.</p>
-
-    <br>
-
-    <form action="{% url 'login' %}" method="GET">
-        <button type="submit">Login</button>
+    <p>This is a demonstration model for the Helpdesk application, a task management system used to log and track technical tickets for an IT. Helpdesk is designed from the ground up for an internal business environment.</p>
+    <p>Please login using your provided login details to get started, or check the Help page for in-depth walkthroughs for using Helpdesk.</p>
+    <p>If you don't yet have a login, please check with your manager or contact the IT Administrator directly.</p>
+</section>
+    
+    <form action="{% url 'login' %}" method="GET" target="_blank" rel="noopener noreferrer">
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
-
-    <br>
-
-    </form>
+    
+<section class="section-box">
+    <h2>History</h2>
+    <p>Helpdesk was originally developed by BK-Technology Ltd for internal use over 15 years ago. From the first iteration, Helpdesk was made using a Microsoft Access database, with MS Access as the user interface.</p>
+    <p>Since the first iteration, which simply recorded tickets, Helpdesk has undergone several improvements over the years. Such as full customer management, overdue issue reminders and even product expiry reminders.</p>
+    <p>However, our current Helpdesk, while robust and functional, is old, using old design principles. Leveraging all the possibilities Full Stack Development has presented us, this new version of Helpdesk will allow us to expand an even greater repetoire of functions, including a dedicated knowledge base database, and even full integration for AI to query the long history of tickets and technical issues we have solved in the past.</p>
+</section>
 
 {% endblock %}

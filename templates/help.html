@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Help & Documentation{% endblock %}
+
+{% block navigation %}
+    {% include "partials/web-nav.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Help & Documentation</h2>
+    <p class="text-muted">Everything you need to understand and use Helpdesk.</p>
+
+    <hr>
+
+    <section class="section-box">
+        <h4>Tickets</h4>
+        <ul>
+            <li>Create new tickets from the Tickets menu.</li>
+            <li>Edit ticket details, assign users, update status.</li>
+            <li>Use the autosave feature — changes save automatically every 5 seconds.</li>
+            <li>Cases tab allows time logging with automatic 15‑minute rounding.</li>
+        </ul>
+    </section>
+
+    <section class="section-box">
+        <h4>Messenger</h4>
+        <ul>
+            <li>Select a contact to open or create a conversation.</li>
+            <li>Messages update automatically every 2 seconds.</li>
+            <li>Unread messages highlight contacts in yellow.</li>
+        </ul>
+    </section>
+
+    <section class="section-box">
+        <h4>User Management</h4>
+        <ul>
+            <li>Admins can manage users in the Admin Panel.</li>
+            <li>Permissions control access to Tickets and Messenger.</li>
+        </ul>
+    </section>
+
+    <section class="section-box">
+        <h4>General</h4>
+        <ul>
+            <li>All pages use CSRF protection.</li>
+            <li>Bootstrap is used for styling.</li>
+            <li>Cloudinary handles media storage.</li>
+        </ul>
+    </section>
+
+</div>
+{% endblock %}
