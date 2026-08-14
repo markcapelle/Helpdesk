@@ -79,6 +79,33 @@
 
 
 
+/* Manage Users table */
+.manage-users-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 870px) {
+    .manage-users-wrapper table {
+        min-width: 870px; 
+    }
+}
+
+/* Stack action buttons on narrow screens */
+@media (max-width: 1200px) {
+    .actions-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem; /* space between buttons */
+        align-items: stretch; /* full width buttons */
+    }
+
+    .actions-cell .btn {
+        width: 100%;
+    }
+}
+
+
 
 
 

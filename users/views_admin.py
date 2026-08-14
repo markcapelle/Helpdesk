@@ -86,7 +86,6 @@ def admin_reset_password(request, user_id):
         user.set_password(new_password)
         user.save()
 
-        messages.success(request, "Password reset successfully.")
         return redirect("admin_user_list")
 
     return render(request, "users/admin/reset_password.html", {"user": user})
@@ -143,7 +142,6 @@ def admin_delete_user(request, user_id):
         # Delete user
         user.delete()
 
-        messages.success(request, "User deleted successfully.")
         return redirect("admin_user_list")
 
     return redirect("admin_user_list")
