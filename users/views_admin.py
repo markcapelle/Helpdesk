@@ -6,7 +6,9 @@ from .utils import admin_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-
+#-----------------------------
+# Manage user list - as admin
+#-----------------------------
 @admin_required
 def admin_user_list(request):
     users = User.objects.all().order_by("username")
@@ -18,7 +20,9 @@ def admin_user_list(request):
     return render(request, "users/admin/user_list.html", {"users": users})
 
 
-
+#-----------------------------
+# Create user - as admin
+#-----------------------------
 @admin_required
 def admin_create_user(request):
     if request.method == "POST":
@@ -63,7 +67,9 @@ def admin_create_user(request):
 
 
 
-
+#-----------------------------
+# Reset user password - as admin
+#-----------------------------
 @admin_required
 def admin_reset_password(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -91,7 +97,9 @@ def admin_reset_password(request, user_id):
     return render(request, "users/admin/reset_password.html", {"user": user})
 
 
-
+#-----------------------------
+# Edit user - as admin
+#-----------------------------
 @admin_required
 def admin_edit_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -130,6 +138,9 @@ def admin_edit_user(request, user_id):
 
 
 
+#-----------------------------
+# Delete user - as admin
+#-----------------------------
 @admin_required
 def admin_delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -147,6 +158,10 @@ def admin_delete_user(request, user_id):
     return redirect("admin_user_list")
 
 
+
+#-----------------------------
+# View user - as admin
+#-----------------------------
 @admin_required
 def admin_view_profile(request, user_id):
     user = get_object_or_404(User, id=user_id)

@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 from .models import Conversation, Message, models
 
 
-
-
+#-----------------------------
+# Has unread messages
+#-----------------------------
 def has_unread_messages(user, other):
     conv = Conversation.objects.filter(
         models.Q(user1=user, user2=other) |
@@ -23,7 +24,9 @@ def has_unread_messages(user, other):
 
 
 
-
+#-----------------------------
+# Messenger home
+#-----------------------------
 @permission_required('messenger.messenger_read', raise_exception=True)
 @login_required
 def messenger_home(request):
@@ -43,6 +46,9 @@ def messenger_home(request):
 
 
 
+#-----------------------------
+# Fetch messages
+#-----------------------------
 @permission_required('messenger.messenger_read', raise_exception=True)
 @login_required
 def fetch_messages(request, conv_id):
@@ -62,6 +68,10 @@ def fetch_messages(request, conv_id):
     })
 
 
+
+#-----------------------------
+# Send message
+#-----------------------------
 @permission_required('messenger.messenger_write', raise_exception=True)
 @login_required
 def send_message(request):
@@ -80,7 +90,9 @@ def send_message(request):
 
 
 
-
+#-----------------------------
+# Create or Get
+#-----------------------------
 @permission_required('messenger.messenger_read', raise_exception=True)
 @login_required
 def create_or_get(request, user_id):
@@ -105,7 +117,9 @@ def create_or_get(request, user_id):
 
 
 
-
+#-----------------------------
+# Check new
+#-----------------------------
 @permission_required('messenger.messenger_read', raise_exception=True)
 @login_required
 def check_new(request, conv_id):
@@ -133,7 +147,9 @@ def check_new(request, conv_id):
 
 
 
-
+#-----------------------------
+# Unread status
+#-----------------------------
 @login_required
 def unread_status(request):
     contacts = User.objects.exclude(id=request.user.id)

@@ -7,7 +7,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from tickets.models import Ticket
 
-# Login request
+#-----------------------------
+# Login page
+#-----------------------------
 def login_page(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -22,7 +24,9 @@ def login_page(request):
 
     return render(request, "login.html")
 
-# Login required to view dashboard
+#-----------------------------
+# Dashboard
+#-----------------------------
 @login_required
 def dashboard(request):
 
@@ -54,7 +58,9 @@ def dashboard(request):
 
 
 
-# Edit user profile
+#-----------------------------
+# Edit user
+#-----------------------------
 @login_required
 def edit_user(request):
     user = request.user
@@ -84,6 +90,10 @@ def edit_user(request):
         "profile_form": profile_form,
     })
 
+
+#-----------------------------
+# User reset password
+#-----------------------------
 @login_required
 def user_reset_password(request):
     user = request.user
@@ -111,6 +121,10 @@ def user_reset_password(request):
 
     return render(request, "users/reset_password.html")
 
+
+#-----------------------------
+# View profile
+#-----------------------------
 @login_required
 def view_profile(request):
     user = request.user

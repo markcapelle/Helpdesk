@@ -6,6 +6,9 @@ from datetime import datetime, date, timedelta
 from django.http import JsonResponse
 
 
+#-----------------------------
+# Ticket list
+#-----------------------------
 @permission_required('tickets.view_ticket', raise_exception=True)
 @login_required
 def ticket_list(request):
@@ -72,7 +75,9 @@ def ticket_list(request):
 
 
 
-
+#-----------------------------
+# Ticket detail
+#-----------------------------
 @permission_required('tickets.change_ticket', raise_exception=True)
 @login_required
 def ticket_detail(request, ticket_id):
@@ -177,7 +182,9 @@ def ticket_detail(request, ticket_id):
 
 
 
-
+#-----------------------------
+# New ticket
+#-----------------------------
 @permission_required('tickets.add_ticket', raise_exception=True)
 @login_required
 def new_ticket(request):
@@ -217,7 +224,9 @@ def new_ticket(request):
     return render(request, "tickets/new_ticket.html")
 
 
-
+#-----------------------------
+# Delete ticket - if permissable
+#-----------------------------
 @permission_required('tickets.delete_ticket', raise_exception=True)
 @login_required
 def delete_ticket(request, ticket_id):
@@ -233,7 +242,9 @@ def delete_ticket(request, ticket_id):
 
 
 
-
+#-----------------------------
+# Delete case - if permissable
+#-----------------------------
 @permission_required('tickets.delete_case', raise_exception=True)
 @login_required
 def delete_case(request, case_id):
