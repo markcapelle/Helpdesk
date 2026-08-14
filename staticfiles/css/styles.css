@@ -51,6 +51,40 @@
 
 
 
+/* Web-nav */
+.web-nav {
+    background-color: #b30000 !important; /* deep red */
+    border-bottom: 3px solid #7a0000;     /* darker red accent */
+}
+
+/* Web-nav link hover underline */
+.web-nav .nav-link {
+    position: relative;
+    color: white !important; /* ensure contrast on red */
+    transition: color 0.15s ease-in-out;
+}
+
+.web-nav .nav-link:hover {
+    color: #ffdddd !important; /* soft highlight */
+}
+
+.web-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background-color: white;
+    transform: scaleX(0);
+    transition: transform 0.2s ease-in-out;
+}
+
+.web-nav .nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+
 
 /* ticket_list ticket table */
 .ticket-table-wrapper {
@@ -77,6 +111,33 @@
 }
 
 
+
+
+/* Manage Users table */
+.manage-users-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 870px) {
+    .manage-users-wrapper table {
+        min-width: 870px; 
+    }
+}
+
+/* Stack action buttons on narrow screens */
+@media (max-width: 1200px) {
+    .actions-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem; /* space between buttons */
+        align-items: stretch; /* full width buttons */
+    }
+
+    .actions-cell .btn {
+        width: 100%;
+    }
+}
 
 
 
@@ -110,3 +171,34 @@
     right: 20px;
     z-index: 9999;
 }
+
+
+/* Main webpage */
+.section-box {
+    background: rgba(255, 255, 255, 0.6); /* faint white overlay */
+    border: 1px solid #e0e0e0;           /* soft border */
+    border-radius: 10px;                 /* rounded corners */
+    padding: 20px;
+
+    /* spacing */
+    margin-top: 30px;                    /* NEW: space above */
+    margin-bottom: 30px;                 /* existing: space below */
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* subtle shadow */
+}
+
+.section-box:first-of-type {
+    margin-top: 0;
+}
+
+
+
+
+/* Contacts */
+.equal-height {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
+}
+
