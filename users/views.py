@@ -28,7 +28,10 @@ def dashboard(request):
 
     sort = request.GET.get("sort", "")
 
-    tickets = Ticket.objects.filter(assigned_to=request.user)
+    tickets = Ticket.objects.filter(
+        assigned_to=request.user,
+        status__name__iexact="open"
+    )
 
     sort_map = {
         "title_asc": "title",
