@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Help & Documentation{% endblock %}
 
 {% block navigation %}
@@ -6,47 +7,115 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<section class="container py-4">
     <h2>Help & Documentation</h2>
     <p class="text-muted">Everything you need to understand and use Helpdesk.</p>
 
+    <section class="section-box">
+        <h2>Contents</h2>
+        <ul>
+            <li><a href="#creating-userid">Creating a UserID</a></li>
+            <li><a href="#logging-in">Logging In</a></li>
+            <li><a href="#forgotten-password">Forgotten Password</a></li>
+            <li><a href="#user-management">User Management</a></li>
+            <li><a href="#tickets">Tickets</a></li>
+            <li><a href="#cases">Cases</a></li>
+            <li><a href="#ticket-status">Ticket Status</a></li>
+            <li><a href="#contacting-admin">Contacting IT Admin</a></li>
+        </ul>
+    </section>
+
     <hr>
 
-    <section class="section-box">
-        <h4>Tickets</h4>
-        <ul>
-            <li>Create new tickets from the Tickets menu.</li>
-            <li>Edit ticket details, assign users, update status.</li>
-            <li>Use the autosave feature — changes save automatically every 5 seconds.</li>
-            <li>Cases tab allows time logging with automatic 15‑minute rounding.</li>
-        </ul>
+    <section class="section-box" id="creating-userid">
+        <h2>Creating a UserID</h2>
+        <p>An IT Administrator will create a userID, link it to your email and send you the login details.</p>
+        <p>The administrator has a management console specifically for users in Helpdesk.</p>
+        
+        <img src="{% static 'img/manage_users.png' %}" alt="Screenshot of the manage users button" class="img-fluid my-1">
+        
+        <p>Here they will have a list of users that can be viewed, edited and deleted. They will also be able to assist you with resetting your password if you need assistance.</p>
+        
+        <img src="{% static 'img/manage_users_actions.png' %}" alt="Screenshot of manage user actions" class="img-fluid my-1">
     </section>
 
-    <section class="section-box">
-        <h4>Messenger</h4>
-        <ul>
-            <li>Select a contact to open or create a conversation.</li>
-            <li>Messages update automatically every 2 seconds.</li>
-            <li>Unread messages highlight contacts in yellow.</li>
-        </ul>
+    <section class="section-box" id="logging-in">
+        <h2>Logging In</h2>
+        <p>To log in, simply click the log in button on the Helpdesk site and input your login details.</p>
+        
+        <img src="{% static 'img/login.png' %}" alt="Screenshot of login page" class="img-fluid my-1">
     </section>
 
-    <section class="section-box">
-        <h4>User Management</h4>
-        <ul>
-            <li>Admins can manage users in the Admin Panel.</li>
-            <li>Permissions control access to Tickets and Messenger.</li>
-        </ul>
+    <section class="section-box" id="forgotten-password">
+        <h2>Forgotten Password</h2>
+        <p>If you have forgotten your password, click the ‘Forgot your password?’ link.</p>
+        <p>You’ll be requested to input the email account associated with your userID.</p>
+        
+        <img src="{% static 'img/send_reset_link.png' %}" alt="Screenshot email field for sending reset link" class="img-fluid my-1">
+        
+        <p>Input your email and click ‘send reset link’ and you’ll shortly receive an email with a link. Ensure to check your junk/spam folder for the email.</p>
+        <p>The link is single use and expires one hour after it was issued. If you fail to reset the first time, you can simply request a new link, or contact an IT Administrator for assistance.</p>
+        <p>Input your new password twice in the password reset form, then you will be able to log in with the new password.</p>
     </section>
 
-    <section class="section-box">
-        <h4>General</h4>
-        <ul>
-            <li>All pages use CSRF protection.</li>
-            <li>Bootstrap is used for styling.</li>
-            <li>Cloudinary handles media storage.</li>
-        </ul>
+    <section class="section-box" id="user-management">
+        <h2>User Profile</h2>
+        <p>Your user management tools are visible at the top right of Helpdesk.</p>
+        
+        <img src="{% static 'img/userprofile_tools.png' %}" alt="Screenshot of user profile management links" class="img-fluid my-1">
+        
+        <p>From here you’ll be able to view and edit your profile with name details and phone number.</p>
+        
+        <img src="{% static 'img/view_userprofile.png' %}" alt="Screenshot of a user profile summary" class="img-fluid my-1">
+        
+        <p>You can reset your password here if you feel it has been compromised.</p>
+        <p>The edit form also allows you to upload an avatar picture.</p>
+        
+        <img src="{% static 'img/edit_userprofile.png' %}" alt="Screenshot of the user profile edit form" class="img-fluid my-1">
     </section>
 
-</div>
+    <section class="section-box" id="tickets">
+        <h2>Tickets</h2>
+        <p>Use the New Ticket button on the main tickets page to create a new ticket.</p>
+        
+        <img src="{% static 'img/new_ticket.png' %}" alt="Screenshot of new ticket button" class="img-fluid my-1">
+        
+        <p>Give it a title and a description and save. You can then view the ticket contents.</p>
+        
+        <img src="{% static 'img/ticket_overview.png' %}" alt="Screenshot of a ticket" class="img-fluid my-1">
+
+        <p>Ensure to give the ticket a descriptive title and put all the issue details in the description.</p>
+        <p>The created date can be back dated if need be. The default due date is 1-week from creation date, but can be adjusted if need be. The due date is a simple reminder for you in case a ticket has been forgotten about, or lost among other issues. Tickets will be highlighted red if they go overdue, for your convenience. The due date can be adjusted if more time is needed on an issue.</p>
+        <p>The outcome field is to summarise the outcome of the issue, along with the fixes that worked, as well as any products or additional equipment that may need to be invoiced to the customer.</p>
+    </section>
+
+    <section class="section-box" id="cases">
+        <h2>Cases</h2>
+        <p>Cases are a timeline within the ticket where you record every step along the way. Every attempted fix, correspondence with the customer, etc, are recorded in cases so that they can be referred to in detail later.</p>
+        
+        <img src="{% static 'img/cases.png' %}" alt="Screenshot of a case entry" class="img-fluid my-1">
+
+        <p>It is important to log cases in detail so that when other engineers pick up a ticket, they can appraise progress and don’t repeat troubleshooting steps you’ve already completed.</p>
+        <p>Cases are also used to record the amount of time spent on an issue. That time is used to bill service contract customers, or invoicing general customers labour hours.</p>
+        <p>Hours are recorded in increments of 15 minutes (0.25, 0.5, 0.75, 1). The timer can assist in keeping estimates accurate. All recorded time is rounded up to the nearest quarter.</p>
+    </section>
+
+    <section class="section-box" id="ticket-status">
+        <h2>Ticket Status</h2>
+        <p>There are multiple states to a ticket.</p>
+
+        <img src="{% static 'img/statuses.png' %}" alt="Screenshot of ticket statuses" class="img-fluid my-1">
+
+        <p><strong>Open:</strong> the ticket is active and being worked on.</p>
+        <p><strong>Closed:</strong> the issue detailed in the ticket does not need addressing anymore, or at this time, so the ticket is closed. It can be re-opened as needed.</p>
+        <p><strong>For Invoicing:</strong> The work outlined in the ticket has been completed, and accounts needs to invoice any additional labour/equipment to the customer before the ticket is closed.</p>
+    </section>
+
+    <section class="section-box" id="contacting-admin">
+        <h2>Contacting IT Admin</h2>
+        <p>The IT Administrator can be contacted along with all other engineers via email, phone or using the Helpdesk messenger app.</p>
+    </section>
+
+
+</section>
 {% endblock %}
